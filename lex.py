@@ -13,14 +13,21 @@ reserved = {
    'while' : 'WHILE',
    'for':'FOR',
    'do':'DO',
-   'int':'INTEGER',
-   'float':'FLOAT',
-   'char':'CHAR',
-   'var':'VAR'
+   'Int':'INT',
+   'Float':'FLOAT',
+   'Char':'CHAR',
+   'String':'STRING',
+   'var':'VAR',
+   'true':'BOOL',
+   'false':'BOOL'
 }
-literals = ['+','-','{','}','(',')','[',']',';',':','=','?',',','%','*','&']
+
+literals = ['+','-','*','/','%','=','&','{','}','(',')','[',']',';',':','.',',','\'','\"','\\']
+
 tokens = [
    'NUMBER',
+   'DECIMAL',
+   'STRINGLITERAL',
    'ID',
    'LT',
    'GT',
@@ -31,7 +38,7 @@ tokens = [
    'INC',
    'DEC'
 
-]+list(reserved.values())
+]+list(set(reserved.values()))
 
 # Regular expression rules for simple tokens
 t_LT=r'<'
@@ -43,16 +50,32 @@ t_NE=r'!='
 t_INC=r'\+\+'
 t_DEC=r'--'
 
-
+# Check for reserved words
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
-    t.type = reserved.get(t.value,'ID')    # Check for reserved words
+    t.type = reserved.get(t.value,'ID')
+    if(t.type=='BOOL'):
+    	t.value = True if t.value == 'true' else False    
     return t
-# A regular expression rule with some action code
+
+
+def t_STRINGLITERAL(t):
+	r'"([^\\\"]|\\.)*\"'
+	t.value=t.value[1:len(t.value)-1]
+	return t
+
+def t_DECIMAL(t):
+	r'(\d*\.?\d+e[+-]?\d+)|(\d*\.\d+)'
+	t.value = float(t.value)
+	return t
+
 def t_NUMBER(t):
     r'\d+'
     t.value = int(t.value)
     return t
+
+def t_comments(t):
+	r'((?s)/\*.*?\*/)|(//.*)'
 
 # Define a rule so we can track line numbers
 def t_newline(t):
@@ -67,24 +90,11 @@ def t_error(t):
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
 
+
 # Build the lexer
 lexer = lex.lex()
 # Test it out
-data = '''
-for(int i=0;i<=10;i++)
-{
-	if(i==0)
-	{
-		int j=0;
-		while(j<5):
-			j+=1
-	}
-	else
-	{
-		215.37+E-32;`
-	}
-}
-'''
+data = '''int x = 40*50+(4/5)'''
 
 # Give the lexer some input
 lexer.input(data)
