@@ -1,0 +1,380 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    BOOL
+    CHAR
+    DEC
+    DO
+    ELSE
+    EQ
+    FLOAT
+    FOR
+    GT
+    GTE
+    IF
+    INC
+    INT
+    LT
+    LTE
+    NE
+    STRING
+    STRINGLITERAL
+    VAR
+    WHILE
+
+Grammar
+
+Rule 0     S' -> start
+Rule 1     start -> assign
+Rule 2     start -> expr
+Rule 3     assign -> ID = expr
+Rule 4     expr -> expr + term
+Rule 5     expr -> expr - term
+Rule 6     expr -> term
+Rule 7     term -> term * factor
+Rule 8     term -> term / factor
+Rule 9     term -> factor
+Rule 10    factor -> DECIMAL
+Rule 11    factor -> NUMBER
+Rule 12    factor -> ( expr )
+
+Terminals, with rules where they appear
+
+(                    : 12
+)                    : 12
+*                    : 7
++                    : 4
+-                    : 5
+/                    : 8
+=                    : 3
+BOOL                 : 
+CHAR                 : 
+DEC                  : 
+DECIMAL              : 10
+DO                   : 
+ELSE                 : 
+EQ                   : 
+FLOAT                : 
+FOR                  : 
+GT                   : 
+GTE                  : 
+ID                   : 3
+IF                   : 
+INC                  : 
+INT                  : 
+LT                   : 
+LTE                  : 
+NE                   : 
+NUMBER               : 11
+STRING               : 
+STRINGLITERAL        : 
+VAR                  : 
+WHILE                : 
+error                : 
+
+Nonterminals, with rules where they appear
+
+assign               : 1
+expr                 : 2 3 4 5 12
+factor               : 7 8 9
+start                : 0
+term                 : 4 5 6 7 8
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . start
+    (1) start -> . assign
+    (2) start -> . expr
+    (3) assign -> . ID = expr
+    (4) expr -> . expr + term
+    (5) expr -> . expr - term
+    (6) expr -> . term
+    (7) term -> . term * factor
+    (8) term -> . term / factor
+    (9) term -> . factor
+    (10) factor -> . DECIMAL
+    (11) factor -> . NUMBER
+    (12) factor -> . ( expr )
+
+    ID              shift and go to state 4
+    DECIMAL         shift and go to state 7
+    NUMBER          shift and go to state 8
+    (               shift and go to state 9
+
+    start                          shift and go to state 1
+    assign                         shift and go to state 2
+    expr                           shift and go to state 3
+    term                           shift and go to state 5
+    factor                         shift and go to state 6
+
+state 1
+
+    (0) S' -> start .
+
+
+
+state 2
+
+    (1) start -> assign .
+
+    $end            reduce using rule 1 (start -> assign .)
+
+
+state 3
+
+    (2) start -> expr .
+    (4) expr -> expr . + term
+    (5) expr -> expr . - term
+
+    $end            reduce using rule 2 (start -> expr .)
+    +               shift and go to state 10
+    -               shift and go to state 11
+
+
+state 4
+
+    (3) assign -> ID . = expr
+
+    =               shift and go to state 12
+
+
+state 5
+
+    (6) expr -> term .
+    (7) term -> term . * factor
+    (8) term -> term . / factor
+
+    +               reduce using rule 6 (expr -> term .)
+    -               reduce using rule 6 (expr -> term .)
+    $end            reduce using rule 6 (expr -> term .)
+    )               reduce using rule 6 (expr -> term .)
+    *               shift and go to state 13
+    /               shift and go to state 14
+
+
+state 6
+
+    (9) term -> factor .
+
+    *               reduce using rule 9 (term -> factor .)
+    /               reduce using rule 9 (term -> factor .)
+    +               reduce using rule 9 (term -> factor .)
+    -               reduce using rule 9 (term -> factor .)
+    $end            reduce using rule 9 (term -> factor .)
+    )               reduce using rule 9 (term -> factor .)
+
+
+state 7
+
+    (10) factor -> DECIMAL .
+
+    *               reduce using rule 10 (factor -> DECIMAL .)
+    /               reduce using rule 10 (factor -> DECIMAL .)
+    +               reduce using rule 10 (factor -> DECIMAL .)
+    -               reduce using rule 10 (factor -> DECIMAL .)
+    $end            reduce using rule 10 (factor -> DECIMAL .)
+    )               reduce using rule 10 (factor -> DECIMAL .)
+
+
+state 8
+
+    (11) factor -> NUMBER .
+
+    *               reduce using rule 11 (factor -> NUMBER .)
+    /               reduce using rule 11 (factor -> NUMBER .)
+    +               reduce using rule 11 (factor -> NUMBER .)
+    -               reduce using rule 11 (factor -> NUMBER .)
+    $end            reduce using rule 11 (factor -> NUMBER .)
+    )               reduce using rule 11 (factor -> NUMBER .)
+
+
+state 9
+
+    (12) factor -> ( . expr )
+    (4) expr -> . expr + term
+    (5) expr -> . expr - term
+    (6) expr -> . term
+    (7) term -> . term * factor
+    (8) term -> . term / factor
+    (9) term -> . factor
+    (10) factor -> . DECIMAL
+    (11) factor -> . NUMBER
+    (12) factor -> . ( expr )
+
+    DECIMAL         shift and go to state 7
+    NUMBER          shift and go to state 8
+    (               shift and go to state 9
+
+    expr                           shift and go to state 15
+    term                           shift and go to state 5
+    factor                         shift and go to state 6
+
+state 10
+
+    (4) expr -> expr + . term
+    (7) term -> . term * factor
+    (8) term -> . term / factor
+    (9) term -> . factor
+    (10) factor -> . DECIMAL
+    (11) factor -> . NUMBER
+    (12) factor -> . ( expr )
+
+    DECIMAL         shift and go to state 7
+    NUMBER          shift and go to state 8
+    (               shift and go to state 9
+
+    term                           shift and go to state 16
+    factor                         shift and go to state 6
+
+state 11
+
+    (5) expr -> expr - . term
+    (7) term -> . term * factor
+    (8) term -> . term / factor
+    (9) term -> . factor
+    (10) factor -> . DECIMAL
+    (11) factor -> . NUMBER
+    (12) factor -> . ( expr )
+
+    DECIMAL         shift and go to state 7
+    NUMBER          shift and go to state 8
+    (               shift and go to state 9
+
+    term                           shift and go to state 17
+    factor                         shift and go to state 6
+
+state 12
+
+    (3) assign -> ID = . expr
+    (4) expr -> . expr + term
+    (5) expr -> . expr - term
+    (6) expr -> . term
+    (7) term -> . term * factor
+    (8) term -> . term / factor
+    (9) term -> . factor
+    (10) factor -> . DECIMAL
+    (11) factor -> . NUMBER
+    (12) factor -> . ( expr )
+
+    DECIMAL         shift and go to state 7
+    NUMBER          shift and go to state 8
+    (               shift and go to state 9
+
+    expr                           shift and go to state 18
+    term                           shift and go to state 5
+    factor                         shift and go to state 6
+
+state 13
+
+    (7) term -> term * . factor
+    (10) factor -> . DECIMAL
+    (11) factor -> . NUMBER
+    (12) factor -> . ( expr )
+
+    DECIMAL         shift and go to state 7
+    NUMBER          shift and go to state 8
+    (               shift and go to state 9
+
+    factor                         shift and go to state 19
+
+state 14
+
+    (8) term -> term / . factor
+    (10) factor -> . DECIMAL
+    (11) factor -> . NUMBER
+    (12) factor -> . ( expr )
+
+    DECIMAL         shift and go to state 7
+    NUMBER          shift and go to state 8
+    (               shift and go to state 9
+
+    factor                         shift and go to state 20
+
+state 15
+
+    (12) factor -> ( expr . )
+    (4) expr -> expr . + term
+    (5) expr -> expr . - term
+
+    )               shift and go to state 21
+    +               shift and go to state 10
+    -               shift and go to state 11
+
+
+state 16
+
+    (4) expr -> expr + term .
+    (7) term -> term . * factor
+    (8) term -> term . / factor
+
+    +               reduce using rule 4 (expr -> expr + term .)
+    -               reduce using rule 4 (expr -> expr + term .)
+    $end            reduce using rule 4 (expr -> expr + term .)
+    )               reduce using rule 4 (expr -> expr + term .)
+    *               shift and go to state 13
+    /               shift and go to state 14
+
+
+state 17
+
+    (5) expr -> expr - term .
+    (7) term -> term . * factor
+    (8) term -> term . / factor
+
+    +               reduce using rule 5 (expr -> expr - term .)
+    -               reduce using rule 5 (expr -> expr - term .)
+    $end            reduce using rule 5 (expr -> expr - term .)
+    )               reduce using rule 5 (expr -> expr - term .)
+    *               shift and go to state 13
+    /               shift and go to state 14
+
+
+state 18
+
+    (3) assign -> ID = expr .
+    (4) expr -> expr . + term
+    (5) expr -> expr . - term
+
+    $end            reduce using rule 3 (assign -> ID = expr .)
+    +               shift and go to state 10
+    -               shift and go to state 11
+
+
+state 19
+
+    (7) term -> term * factor .
+
+    *               reduce using rule 7 (term -> term * factor .)
+    /               reduce using rule 7 (term -> term * factor .)
+    +               reduce using rule 7 (term -> term * factor .)
+    -               reduce using rule 7 (term -> term * factor .)
+    $end            reduce using rule 7 (term -> term * factor .)
+    )               reduce using rule 7 (term -> term * factor .)
+
+
+state 20
+
+    (8) term -> term / factor .
+
+    *               reduce using rule 8 (term -> term / factor .)
+    /               reduce using rule 8 (term -> term / factor .)
+    +               reduce using rule 8 (term -> term / factor .)
+    -               reduce using rule 8 (term -> term / factor .)
+    $end            reduce using rule 8 (term -> term / factor .)
+    )               reduce using rule 8 (term -> term / factor .)
+
+
+state 21
+
+    (12) factor -> ( expr ) .
+
+    *               reduce using rule 12 (factor -> ( expr ) .)
+    /               reduce using rule 12 (factor -> ( expr ) .)
+    +               reduce using rule 12 (factor -> ( expr ) .)
+    -               reduce using rule 12 (factor -> ( expr ) .)
+    $end            reduce using rule 12 (factor -> ( expr ) .)
+    )               reduce using rule 12 (factor -> ( expr ) .)
+
