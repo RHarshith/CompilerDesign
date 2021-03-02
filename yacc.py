@@ -24,9 +24,29 @@ def p_start(p):
         p[0] = ('BOOL', p[1])
 
 def p_branch(p):
-    '''branch : IF '(' condition ')' body
-              | IF '(' condition ')' '{' body '}' '''
+    '''branch : if branchif'''
+    p[0] = (p[1], p[2]) if len(p) > 2 else p[1]
+
+def p_if(p):
+    '''if : IF '(' condition ')' body
+          | IF '(' condition ')' '{' body '}' '''
     p[0] = ('IF', p[3], p[6]) if len(p)>6 else ('IF', p[3], p[5])
+
+def p_branchif(p):
+    '''branchif : ELSE if branchif
+                | else
+                | empty'''
+    print(len(p), tuple(p))
+    if len(p) > 2:
+        # p[0] = ('ELSE', p[2])
+        p[0] = ('ELSEIF',) + tuple(p)[2:]
+    elif len(p) == 2:
+        p[0] = p[1]
+
+def p_else(p):
+    '''else : ELSE body
+            | ELSE '{' body '}' '''
+    p[0] = ('ELSE', p[3]) if len(p) > 3 else ('ELSE', p[2])
 
 def p_body(p):
     '''body : assign body
@@ -87,6 +107,9 @@ def p_factor_expr(p):
      "factor : '(' expr ')'"
      p[0] = p[2]
 
+def p_empty(p):
+     'empty :'
+     pass
 
 def p_error(p):
      print("Syntax error in input!")
@@ -96,6 +119,10 @@ data= '''if(1>5) {
     s=12564
     b=45
     c=456
+} else if(5>10) {
+    s=489
+} else if(78>7) {
+    s=45
 }'''
 # data = input()
 t=yacc.parse(data)
