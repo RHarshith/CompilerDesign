@@ -26,10 +26,13 @@ def p_start(p):
 def p_branch(p):
     '''branch : IF '(' condition ')' body
               | IF '(' condition ')' '{' body '}' '''
-    p[0] = ('IF', p[3])
+    p[0] = ('IF', p[3], p[6]) if len(p)>6 else ('IF', p[3], p[5])
 
 def p_body(p):
-    '''body : assign'''
+    '''body : assign body
+            | assign'''
+    # print(len(p), 'as', (p[1], p[2]) if len(p) > 2 else (p[1],))
+    p[0] = (p[1], p[2]) if len(p) > 2 else p[1]
 
 def p_assign(p):
     '''assign : ID ASSIGN expr'''
@@ -89,9 +92,11 @@ def p_error(p):
      print("Syntax error in input!")
 
 yacc.yacc()
-data= '''if(1>4) {
-    a=5
-}   '''
+data= '''if(1>5) {
+    s=12564
+    b=45
+    c=456
+}'''
 # data = input()
 t=yacc.parse(data)
 print(t)
