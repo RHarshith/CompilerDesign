@@ -36,7 +36,8 @@ tokens = [
    'EQ',
    'NE',
    'INC',
-   'DEC'
+   'DEC',
+   'ASSIGN'
 
 ]+list(set(reserved.values()))
 
@@ -49,6 +50,7 @@ t_EQ=r'=='
 t_NE=r'!='
 t_INC=r'\+\+'
 t_DEC=r'--'
+t_ASSIGN=r'='
 
 # Check for reserved words
 def t_ID(t):
@@ -93,13 +95,15 @@ def t_error(t):
 
 # Build the lexer
 lexer = lex.lex()
-# Test it out
-data = '''int x = 40*50+(4/5)'''
 
-# Give the lexer some input
-lexer.input(data)
+if __name__ == '__main__':
+  # Test it out
+  data = '''int x = 40*50+(4/5)'''
 
-# Tokenize
-for tok in lexer:# No more input
-    print(tok)
+  # Give the lexer some input
+  lexer.input(data)
+
+  # Tokenize
+  for tok in lexer:# No more input
+      print(tok)
 
