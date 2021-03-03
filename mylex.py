@@ -1,9 +1,4 @@
-# ------------------------------------------------------------
-# calclex.py
-#
-# tokenizer for a simple expression evaluator for
-# numbers and +,-,*,/
-# ------------------------------------------------------------
+
 import ply.lex as lex
 
 # List of token names.   This is always required
@@ -18,15 +13,15 @@ reserved = {
    'Char':'CHAR',
    'String':'STRING',
    'var':'VAR',
-   'true':'BOOL',
-   'false':'BOOL'
+   'true':'BOOLEAN',
+   'false':'BOOLEAN',
+   'Bool' : 'BOOL'
 }
 
 literals = ['+','-','*','/','%','&','{','}','(',')','[',']',';',':','.',',','\'','\"','\\']
 
 tokens = [
    'NUMBER',
-   'ASSIGN',
    'DECIMAL',
    'STRINGLITERAL',
    'ID',
@@ -38,7 +33,8 @@ tokens = [
    'NE',
    'INC',
    'DEC',
-   'ASSIGN'
+   'ASSIGN',
+   'NEWLINE'
 
 ]+list(set(reserved.values()))
 
@@ -48,7 +44,6 @@ t_GT=r'>'
 t_LTE=r'<='
 t_GTE=r'>='
 t_EQ=r'=='
-t_ASSIGN=r'='
 t_NE=r'!='
 t_INC=r'\+\+'
 t_DEC=r'--'
@@ -58,7 +53,7 @@ t_ASSIGN=r'='
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
     t.type = reserved.get(t.value,'ID')
-    if(t.type=='BOOL'):
+    if(t.type=='BOOLEAN'):
     	t.value = True if t.value == 'true' else False    
     return t
 
@@ -82,9 +77,10 @@ def t_comments(t):
 	r'((?s)/\*.*?\*/)|(//.*)'
 
 # Define a rule so we can track line numbers
-def t_newline(t):
+def t_NEWLINE(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
+    
 
 # A string containing ignored characters (spaces and tabs)
 t_ignore  = ' \t'
@@ -100,7 +96,9 @@ lexer = lex.lex()
 
 if __name__ == '__main__':
   # Test it out
-  data = '''int x = 40*50+(4/5)'''
+  data = '''
+  x = true;
+  '''
 
   # Give the lexer some input
   lexer.input(data)
@@ -108,4 +106,3 @@ if __name__ == '__main__':
   # Tokenize
   for tok in lexer:# No more input
       print(tok)
-
