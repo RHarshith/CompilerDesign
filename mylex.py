@@ -83,7 +83,11 @@ def t_NEWLINE(t):
     
 
 # A string containing ignored characters (spaces and tabs)
+<<<<<<< HEAD
+t_ignore  = ' \t\n'
+=======
 t_ignore  = ' \t'
+>>>>>>> e9725e06ce99fc0697cadd3dd2a9c8bdfec9dd43
 
 # Error handling rule
 def t_error(t):
@@ -94,6 +98,7 @@ def t_error(t):
 # Build the lexer
 lexer = lex.lex()
 
+<<<<<<< HEAD
 data='''var catfish : Int = 10;
 if(catfish+10)
 var a:Int;
@@ -103,3 +108,17 @@ c=a;
 lexer.input(data)
 for tok in lexer:
    print(tok)
+=======
+if __name__ == '__main__':
+  # Test it out
+  data = '''
+  x = true;
+  '''
+
+  # Give the lexer some input
+  lexer.input(data)
+
+  # Tokenize
+  for tok in lexer:# No more input
+      print(tok)
+>>>>>>> e9725e06ce99fc0697cadd3dd2a9c8bdfec9dd43
