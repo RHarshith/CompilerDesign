@@ -94,15 +94,12 @@ def t_error(t):
 # Build the lexer
 lexer = lex.lex()
 
-if __name__ == '__main__':
-  # Test it out
-  data = '''
-  x = true;
-  '''
-
-  # Give the lexer some input
-  lexer.input(data)
-
-  # Tokenize
-  for tok in lexer:# No more input
-      print(tok)
+data='''var catfish : Int = 10;
+if(catfish+10)
+var a:Int;
+var c:Int;
+c=a;
+'''
+lexer.input(data)
+for tok in lexer:
+   print(tok)

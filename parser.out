@@ -2,113 +2,140 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
-    BOOL
-    CHAR
     DEC
     DO
     ELSE
-    EQ
-    FLOAT
     FOR
-    GT
-    GTE
-    IF
     INC
-    INT
-    LT
-    LTE
-    NE
-    STRING
-    STRINGLITERAL
-    VAR
+    NEWLINE
     WHILE
 
 Grammar
 
 Rule 0     S' -> start
-Rule 1     start -> assign
-Rule 2     start -> expr
-Rule 3     assign -> ID = expr
-Rule 4     expr -> expr + term
-Rule 5     expr -> expr - term
-Rule 6     expr -> term
-Rule 7     term -> term * factor
-Rule 8     term -> term / factor
-Rule 9     term -> factor
-Rule 10    factor -> DECIMAL
-Rule 11    factor -> NUMBER
-Rule 12    factor -> ( expr )
+Rule 1     start -> code
+Rule 2     code -> stmt
+Rule 3     code -> stmt code
+Rule 4     stmt -> declare ;
+Rule 5     stmt -> ifelse
+Rule 6     stmt -> ;
+Rule 7     ifelse -> IF ( ifexpr ) stmt
+Rule 8     ifelse -> IF ( ifexpr ) { code }
+Rule 9     ifexpr -> expression LT expression
+Rule 10    ifexpr -> expression EQ expression
+Rule 11    ifexpr -> expression GT expression
+Rule 12    ifexpr -> expression GTE expression
+Rule 13    ifexpr -> expression LTE expression
+Rule 14    ifexpr -> expression NE expression
+Rule 15    ifexpr -> expression
+Rule 16    expression -> expression + term
+Rule 17    expression -> expression - term
+Rule 18    expression -> term
+Rule 19    term -> term * factor
+Rule 20    term -> term / factor
+Rule 21    term -> factor
+Rule 22    factor -> rval
+Rule 23    factor -> ( expression )
+Rule 24    operator -> +
+Rule 25    operator -> -
+Rule 26    operator -> *
+Rule 27    operator -> /
+Rule 28    declare -> VAR ID : type ASSIGN expression
+Rule 29    declare -> VAR ID : type
+Rule 30    declare -> ID ASSIGN expression
+Rule 31    type -> INT
+Rule 32    type -> FLOAT
+Rule 33    type -> BOOL
+Rule 34    type -> CHAR
+Rule 35    type -> STRING
+Rule 36    rval -> NUMBER
+Rule 37    rval -> DECIMAL
+Rule 38    rval -> BOOLEAN
+Rule 39    rval -> STRINGLITERAL
+Rule 40    rval -> ID
 
 Terminals, with rules where they appear
 
-(                    : 12
-)                    : 12
-*                    : 7
-+                    : 4
--                    : 5
-/                    : 8
-=                    : 3
-BOOL                 : 
-CHAR                 : 
+(                    : 7 8 23
+)                    : 7 8 23
+*                    : 19 26
++                    : 16 24
+-                    : 17 25
+/                    : 20 27
+:                    : 28 29
+;                    : 4 6
+ASSIGN               : 28 30
+BOOL                 : 33
+BOOLEAN              : 38
+CHAR                 : 34
 DEC                  : 
-DECIMAL              : 10
+DECIMAL              : 37
 DO                   : 
 ELSE                 : 
-EQ                   : 
-FLOAT                : 
+EQ                   : 10
+FLOAT                : 32
 FOR                  : 
-GT                   : 
-GTE                  : 
-ID                   : 3
-IF                   : 
+GT                   : 11
+GTE                  : 12
+ID                   : 28 29 30 40
+IF                   : 7 8
 INC                  : 
-INT                  : 
-LT                   : 
-LTE                  : 
-NE                   : 
-NUMBER               : 11
-STRING               : 
-STRINGLITERAL        : 
-VAR                  : 
+INT                  : 31
+LT                   : 9
+LTE                  : 13
+NE                   : 14
+NEWLINE              : 
+NUMBER               : 36
+STRING               : 35
+STRINGLITERAL        : 39
+VAR                  : 28 29
 WHILE                : 
 error                : 
+{                    : 8
+}                    : 8
 
 Nonterminals, with rules where they appear
 
-assign               : 1
-expr                 : 2 3 4 5 12
-factor               : 7 8 9
+code                 : 1 3 8
+declare              : 4
+expression           : 9 9 10 10 11 11 12 12 13 13 14 14 15 16 17 23 28 30
+factor               : 19 20 21
+ifelse               : 5
+ifexpr               : 7 8
+operator             : 
+rval                 : 22
 start                : 0
-term                 : 4 5 6 7 8
+stmt                 : 2 3 7
+term                 : 16 17 18 19 20
+type                 : 28 29
 
 Parsing method: LALR
 
 state 0
 
     (0) S' -> . start
-    (1) start -> . assign
-    (2) start -> . expr
-    (3) assign -> . ID = expr
-    (4) expr -> . expr + term
-    (5) expr -> . expr - term
-    (6) expr -> . term
-    (7) term -> . term * factor
-    (8) term -> . term / factor
-    (9) term -> . factor
-    (10) factor -> . DECIMAL
-    (11) factor -> . NUMBER
-    (12) factor -> . ( expr )
+    (1) start -> . code
+    (2) code -> . stmt
+    (3) code -> . stmt code
+    (4) stmt -> . declare ;
+    (5) stmt -> . ifelse
+    (6) stmt -> . ;
+    (28) declare -> . VAR ID : type ASSIGN expression
+    (29) declare -> . VAR ID : type
+    (30) declare -> . ID ASSIGN expression
+    (7) ifelse -> . IF ( ifexpr ) stmt
+    (8) ifelse -> . IF ( ifexpr ) { code }
 
-    ID              shift and go to state 4
-    DECIMAL         shift and go to state 7
-    NUMBER          shift and go to state 8
-    (               shift and go to state 9
+    ;               shift and go to state 5
+    VAR             shift and go to state 7
+    ID              shift and go to state 8
+    IF              shift and go to state 9
 
     start                          shift and go to state 1
-    assign                         shift and go to state 2
-    expr                           shift and go to state 3
-    term                           shift and go to state 5
-    factor                         shift and go to state 6
+    code                           shift and go to state 2
+    stmt                           shift and go to state 3
+    declare                        shift and go to state 4
+    ifelse                         shift and go to state 6
 
 state 1
 
@@ -118,263 +145,1022 @@ state 1
 
 state 2
 
-    (1) start -> assign .
+    (1) start -> code .
 
-    $end            reduce using rule 1 (start -> assign .)
+    $end            reduce using rule 1 (start -> code .)
 
 
 state 3
 
-    (2) start -> expr .
-    (4) expr -> expr . + term
-    (5) expr -> expr . - term
+    (2) code -> stmt .
+    (3) code -> stmt . code
+    (2) code -> . stmt
+    (3) code -> . stmt code
+    (4) stmt -> . declare ;
+    (5) stmt -> . ifelse
+    (6) stmt -> . ;
+    (28) declare -> . VAR ID : type ASSIGN expression
+    (29) declare -> . VAR ID : type
+    (30) declare -> . ID ASSIGN expression
+    (7) ifelse -> . IF ( ifexpr ) stmt
+    (8) ifelse -> . IF ( ifexpr ) { code }
 
-    $end            reduce using rule 2 (start -> expr .)
-    +               shift and go to state 10
-    -               shift and go to state 11
+    $end            reduce using rule 2 (code -> stmt .)
+    }               reduce using rule 2 (code -> stmt .)
+    ;               shift and go to state 5
+    VAR             shift and go to state 7
+    ID              shift and go to state 8
+    IF              shift and go to state 9
 
+    stmt                           shift and go to state 3
+    code                           shift and go to state 10
+    declare                        shift and go to state 4
+    ifelse                         shift and go to state 6
 
 state 4
 
-    (3) assign -> ID . = expr
+    (4) stmt -> declare . ;
 
-    =               shift and go to state 12
+    ;               shift and go to state 11
 
 
 state 5
 
-    (6) expr -> term .
-    (7) term -> term . * factor
-    (8) term -> term . / factor
+    (6) stmt -> ; .
 
-    +               reduce using rule 6 (expr -> term .)
-    -               reduce using rule 6 (expr -> term .)
-    $end            reduce using rule 6 (expr -> term .)
-    )               reduce using rule 6 (expr -> term .)
-    *               shift and go to state 13
-    /               shift and go to state 14
+    ;               reduce using rule 6 (stmt -> ; .)
+    VAR             reduce using rule 6 (stmt -> ; .)
+    ID              reduce using rule 6 (stmt -> ; .)
+    IF              reduce using rule 6 (stmt -> ; .)
+    $end            reduce using rule 6 (stmt -> ; .)
+    }               reduce using rule 6 (stmt -> ; .)
 
 
 state 6
 
-    (9) term -> factor .
+    (5) stmt -> ifelse .
 
-    *               reduce using rule 9 (term -> factor .)
-    /               reduce using rule 9 (term -> factor .)
-    +               reduce using rule 9 (term -> factor .)
-    -               reduce using rule 9 (term -> factor .)
-    $end            reduce using rule 9 (term -> factor .)
-    )               reduce using rule 9 (term -> factor .)
+    ;               reduce using rule 5 (stmt -> ifelse .)
+    VAR             reduce using rule 5 (stmt -> ifelse .)
+    ID              reduce using rule 5 (stmt -> ifelse .)
+    IF              reduce using rule 5 (stmt -> ifelse .)
+    $end            reduce using rule 5 (stmt -> ifelse .)
+    }               reduce using rule 5 (stmt -> ifelse .)
 
 
 state 7
 
-    (10) factor -> DECIMAL .
+    (28) declare -> VAR . ID : type ASSIGN expression
+    (29) declare -> VAR . ID : type
 
-    *               reduce using rule 10 (factor -> DECIMAL .)
-    /               reduce using rule 10 (factor -> DECIMAL .)
-    +               reduce using rule 10 (factor -> DECIMAL .)
-    -               reduce using rule 10 (factor -> DECIMAL .)
-    $end            reduce using rule 10 (factor -> DECIMAL .)
-    )               reduce using rule 10 (factor -> DECIMAL .)
+    ID              shift and go to state 12
 
 
 state 8
 
-    (11) factor -> NUMBER .
+    (30) declare -> ID . ASSIGN expression
 
-    *               reduce using rule 11 (factor -> NUMBER .)
-    /               reduce using rule 11 (factor -> NUMBER .)
-    +               reduce using rule 11 (factor -> NUMBER .)
-    -               reduce using rule 11 (factor -> NUMBER .)
-    $end            reduce using rule 11 (factor -> NUMBER .)
-    )               reduce using rule 11 (factor -> NUMBER .)
+    ASSIGN          shift and go to state 13
 
 
 state 9
 
-    (12) factor -> ( . expr )
-    (4) expr -> . expr + term
-    (5) expr -> . expr - term
-    (6) expr -> . term
-    (7) term -> . term * factor
-    (8) term -> . term / factor
-    (9) term -> . factor
-    (10) factor -> . DECIMAL
-    (11) factor -> . NUMBER
-    (12) factor -> . ( expr )
+    (7) ifelse -> IF . ( ifexpr ) stmt
+    (8) ifelse -> IF . ( ifexpr ) { code }
 
-    DECIMAL         shift and go to state 7
-    NUMBER          shift and go to state 8
-    (               shift and go to state 9
+    (               shift and go to state 14
 
-    expr                           shift and go to state 15
-    term                           shift and go to state 5
-    factor                         shift and go to state 6
 
 state 10
 
-    (4) expr -> expr + . term
-    (7) term -> . term * factor
-    (8) term -> . term / factor
-    (9) term -> . factor
-    (10) factor -> . DECIMAL
-    (11) factor -> . NUMBER
-    (12) factor -> . ( expr )
+    (3) code -> stmt code .
 
-    DECIMAL         shift and go to state 7
-    NUMBER          shift and go to state 8
-    (               shift and go to state 9
+    $end            reduce using rule 3 (code -> stmt code .)
+    }               reduce using rule 3 (code -> stmt code .)
 
-    term                           shift and go to state 16
-    factor                         shift and go to state 6
 
 state 11
 
-    (5) expr -> expr - . term
-    (7) term -> . term * factor
-    (8) term -> . term / factor
-    (9) term -> . factor
-    (10) factor -> . DECIMAL
-    (11) factor -> . NUMBER
-    (12) factor -> . ( expr )
+    (4) stmt -> declare ; .
 
-    DECIMAL         shift and go to state 7
-    NUMBER          shift and go to state 8
-    (               shift and go to state 9
+    ;               reduce using rule 4 (stmt -> declare ; .)
+    VAR             reduce using rule 4 (stmt -> declare ; .)
+    ID              reduce using rule 4 (stmt -> declare ; .)
+    IF              reduce using rule 4 (stmt -> declare ; .)
+    $end            reduce using rule 4 (stmt -> declare ; .)
+    }               reduce using rule 4 (stmt -> declare ; .)
 
-    term                           shift and go to state 17
-    factor                         shift and go to state 6
 
 state 12
 
-    (3) assign -> ID = . expr
-    (4) expr -> . expr + term
-    (5) expr -> . expr - term
-    (6) expr -> . term
-    (7) term -> . term * factor
-    (8) term -> . term / factor
-    (9) term -> . factor
-    (10) factor -> . DECIMAL
-    (11) factor -> . NUMBER
-    (12) factor -> . ( expr )
+    (28) declare -> VAR ID . : type ASSIGN expression
+    (29) declare -> VAR ID . : type
 
-    DECIMAL         shift and go to state 7
-    NUMBER          shift and go to state 8
-    (               shift and go to state 9
+    :               shift and go to state 15
 
-    expr                           shift and go to state 18
-    term                           shift and go to state 5
-    factor                         shift and go to state 6
 
 state 13
 
-    (7) term -> term * . factor
-    (10) factor -> . DECIMAL
-    (11) factor -> . NUMBER
-    (12) factor -> . ( expr )
+    (30) declare -> ID ASSIGN . expression
+    (16) expression -> . expression + term
+    (17) expression -> . expression - term
+    (18) expression -> . term
+    (19) term -> . term * factor
+    (20) term -> . term / factor
+    (21) term -> . factor
+    (22) factor -> . rval
+    (23) factor -> . ( expression )
+    (36) rval -> . NUMBER
+    (37) rval -> . DECIMAL
+    (38) rval -> . BOOLEAN
+    (39) rval -> . STRINGLITERAL
+    (40) rval -> . ID
 
-    DECIMAL         shift and go to state 7
-    NUMBER          shift and go to state 8
-    (               shift and go to state 9
+    (               shift and go to state 21
+    NUMBER          shift and go to state 22
+    DECIMAL         shift and go to state 23
+    BOOLEAN         shift and go to state 24
+    STRINGLITERAL   shift and go to state 25
+    ID              shift and go to state 16
 
+    expression                     shift and go to state 17
+    term                           shift and go to state 18
     factor                         shift and go to state 19
+    rval                           shift and go to state 20
 
 state 14
 
-    (8) term -> term / . factor
-    (10) factor -> . DECIMAL
-    (11) factor -> . NUMBER
-    (12) factor -> . ( expr )
+    (7) ifelse -> IF ( . ifexpr ) stmt
+    (8) ifelse -> IF ( . ifexpr ) { code }
+    (9) ifexpr -> . expression LT expression
+    (10) ifexpr -> . expression EQ expression
+    (11) ifexpr -> . expression GT expression
+    (12) ifexpr -> . expression GTE expression
+    (13) ifexpr -> . expression LTE expression
+    (14) ifexpr -> . expression NE expression
+    (15) ifexpr -> . expression
+    (16) expression -> . expression + term
+    (17) expression -> . expression - term
+    (18) expression -> . term
+    (19) term -> . term * factor
+    (20) term -> . term / factor
+    (21) term -> . factor
+    (22) factor -> . rval
+    (23) factor -> . ( expression )
+    (36) rval -> . NUMBER
+    (37) rval -> . DECIMAL
+    (38) rval -> . BOOLEAN
+    (39) rval -> . STRINGLITERAL
+    (40) rval -> . ID
 
-    DECIMAL         shift and go to state 7
-    NUMBER          shift and go to state 8
-    (               shift and go to state 9
+    (               shift and go to state 21
+    NUMBER          shift and go to state 22
+    DECIMAL         shift and go to state 23
+    BOOLEAN         shift and go to state 24
+    STRINGLITERAL   shift and go to state 25
+    ID              shift and go to state 16
 
-    factor                         shift and go to state 20
+    ifexpr                         shift and go to state 26
+    expression                     shift and go to state 27
+    term                           shift and go to state 18
+    factor                         shift and go to state 19
+    rval                           shift and go to state 20
 
 state 15
 
-    (12) factor -> ( expr . )
-    (4) expr -> expr . + term
-    (5) expr -> expr . - term
+    (28) declare -> VAR ID : . type ASSIGN expression
+    (29) declare -> VAR ID : . type
+    (31) type -> . INT
+    (32) type -> . FLOAT
+    (33) type -> . BOOL
+    (34) type -> . CHAR
+    (35) type -> . STRING
 
-    )               shift and go to state 21
-    +               shift and go to state 10
-    -               shift and go to state 11
+    INT             shift and go to state 29
+    FLOAT           shift and go to state 30
+    BOOL            shift and go to state 31
+    CHAR            shift and go to state 32
+    STRING          shift and go to state 33
 
+    type                           shift and go to state 28
 
 state 16
 
-    (4) expr -> expr + term .
-    (7) term -> term . * factor
-    (8) term -> term . / factor
+    (40) rval -> ID .
 
-    +               reduce using rule 4 (expr -> expr + term .)
-    -               reduce using rule 4 (expr -> expr + term .)
-    $end            reduce using rule 4 (expr -> expr + term .)
-    )               reduce using rule 4 (expr -> expr + term .)
-    *               shift and go to state 13
-    /               shift and go to state 14
+    *               reduce using rule 40 (rval -> ID .)
+    /               reduce using rule 40 (rval -> ID .)
+    +               reduce using rule 40 (rval -> ID .)
+    -               reduce using rule 40 (rval -> ID .)
+    ;               reduce using rule 40 (rval -> ID .)
+    LT              reduce using rule 40 (rval -> ID .)
+    EQ              reduce using rule 40 (rval -> ID .)
+    GT              reduce using rule 40 (rval -> ID .)
+    GTE             reduce using rule 40 (rval -> ID .)
+    LTE             reduce using rule 40 (rval -> ID .)
+    NE              reduce using rule 40 (rval -> ID .)
+    )               reduce using rule 40 (rval -> ID .)
 
 
 state 17
 
-    (5) expr -> expr - term .
-    (7) term -> term . * factor
-    (8) term -> term . / factor
+    (30) declare -> ID ASSIGN expression .
+    (16) expression -> expression . + term
+    (17) expression -> expression . - term
 
-    +               reduce using rule 5 (expr -> expr - term .)
-    -               reduce using rule 5 (expr -> expr - term .)
-    $end            reduce using rule 5 (expr -> expr - term .)
-    )               reduce using rule 5 (expr -> expr - term .)
-    *               shift and go to state 13
-    /               shift and go to state 14
+    ;               reduce using rule 30 (declare -> ID ASSIGN expression .)
+    +               shift and go to state 34
+    -               shift and go to state 35
 
 
 state 18
 
-    (3) assign -> ID = expr .
-    (4) expr -> expr . + term
-    (5) expr -> expr . - term
+    (18) expression -> term .
+    (19) term -> term . * factor
+    (20) term -> term . / factor
 
-    $end            reduce using rule 3 (assign -> ID = expr .)
-    +               shift and go to state 10
-    -               shift and go to state 11
+    +               reduce using rule 18 (expression -> term .)
+    -               reduce using rule 18 (expression -> term .)
+    ;               reduce using rule 18 (expression -> term .)
+    LT              reduce using rule 18 (expression -> term .)
+    EQ              reduce using rule 18 (expression -> term .)
+    GT              reduce using rule 18 (expression -> term .)
+    GTE             reduce using rule 18 (expression -> term .)
+    LTE             reduce using rule 18 (expression -> term .)
+    NE              reduce using rule 18 (expression -> term .)
+    )               reduce using rule 18 (expression -> term .)
+    *               shift and go to state 36
+    /               shift and go to state 37
 
 
 state 19
 
-    (7) term -> term * factor .
+    (21) term -> factor .
 
-    *               reduce using rule 7 (term -> term * factor .)
-    /               reduce using rule 7 (term -> term * factor .)
-    +               reduce using rule 7 (term -> term * factor .)
-    -               reduce using rule 7 (term -> term * factor .)
-    $end            reduce using rule 7 (term -> term * factor .)
-    )               reduce using rule 7 (term -> term * factor .)
+    *               reduce using rule 21 (term -> factor .)
+    /               reduce using rule 21 (term -> factor .)
+    +               reduce using rule 21 (term -> factor .)
+    -               reduce using rule 21 (term -> factor .)
+    ;               reduce using rule 21 (term -> factor .)
+    LT              reduce using rule 21 (term -> factor .)
+    EQ              reduce using rule 21 (term -> factor .)
+    GT              reduce using rule 21 (term -> factor .)
+    GTE             reduce using rule 21 (term -> factor .)
+    LTE             reduce using rule 21 (term -> factor .)
+    NE              reduce using rule 21 (term -> factor .)
+    )               reduce using rule 21 (term -> factor .)
 
 
 state 20
 
-    (8) term -> term / factor .
+    (22) factor -> rval .
 
-    *               reduce using rule 8 (term -> term / factor .)
-    /               reduce using rule 8 (term -> term / factor .)
-    +               reduce using rule 8 (term -> term / factor .)
-    -               reduce using rule 8 (term -> term / factor .)
-    $end            reduce using rule 8 (term -> term / factor .)
-    )               reduce using rule 8 (term -> term / factor .)
+    *               reduce using rule 22 (factor -> rval .)
+    /               reduce using rule 22 (factor -> rval .)
+    +               reduce using rule 22 (factor -> rval .)
+    -               reduce using rule 22 (factor -> rval .)
+    ;               reduce using rule 22 (factor -> rval .)
+    LT              reduce using rule 22 (factor -> rval .)
+    EQ              reduce using rule 22 (factor -> rval .)
+    GT              reduce using rule 22 (factor -> rval .)
+    GTE             reduce using rule 22 (factor -> rval .)
+    LTE             reduce using rule 22 (factor -> rval .)
+    NE              reduce using rule 22 (factor -> rval .)
+    )               reduce using rule 22 (factor -> rval .)
 
 
 state 21
 
-    (12) factor -> ( expr ) .
+    (23) factor -> ( . expression )
+    (16) expression -> . expression + term
+    (17) expression -> . expression - term
+    (18) expression -> . term
+    (19) term -> . term * factor
+    (20) term -> . term / factor
+    (21) term -> . factor
+    (22) factor -> . rval
+    (23) factor -> . ( expression )
+    (36) rval -> . NUMBER
+    (37) rval -> . DECIMAL
+    (38) rval -> . BOOLEAN
+    (39) rval -> . STRINGLITERAL
+    (40) rval -> . ID
 
-    *               reduce using rule 12 (factor -> ( expr ) .)
-    /               reduce using rule 12 (factor -> ( expr ) .)
-    +               reduce using rule 12 (factor -> ( expr ) .)
-    -               reduce using rule 12 (factor -> ( expr ) .)
-    $end            reduce using rule 12 (factor -> ( expr ) .)
-    )               reduce using rule 12 (factor -> ( expr ) .)
+    (               shift and go to state 21
+    NUMBER          shift and go to state 22
+    DECIMAL         shift and go to state 23
+    BOOLEAN         shift and go to state 24
+    STRINGLITERAL   shift and go to state 25
+    ID              shift and go to state 16
+
+    expression                     shift and go to state 38
+    term                           shift and go to state 18
+    factor                         shift and go to state 19
+    rval                           shift and go to state 20
+
+state 22
+
+    (36) rval -> NUMBER .
+
+    *               reduce using rule 36 (rval -> NUMBER .)
+    /               reduce using rule 36 (rval -> NUMBER .)
+    +               reduce using rule 36 (rval -> NUMBER .)
+    -               reduce using rule 36 (rval -> NUMBER .)
+    ;               reduce using rule 36 (rval -> NUMBER .)
+    LT              reduce using rule 36 (rval -> NUMBER .)
+    EQ              reduce using rule 36 (rval -> NUMBER .)
+    GT              reduce using rule 36 (rval -> NUMBER .)
+    GTE             reduce using rule 36 (rval -> NUMBER .)
+    LTE             reduce using rule 36 (rval -> NUMBER .)
+    NE              reduce using rule 36 (rval -> NUMBER .)
+    )               reduce using rule 36 (rval -> NUMBER .)
+
+
+state 23
+
+    (37) rval -> DECIMAL .
+
+    *               reduce using rule 37 (rval -> DECIMAL .)
+    /               reduce using rule 37 (rval -> DECIMAL .)
+    +               reduce using rule 37 (rval -> DECIMAL .)
+    -               reduce using rule 37 (rval -> DECIMAL .)
+    ;               reduce using rule 37 (rval -> DECIMAL .)
+    LT              reduce using rule 37 (rval -> DECIMAL .)
+    EQ              reduce using rule 37 (rval -> DECIMAL .)
+    GT              reduce using rule 37 (rval -> DECIMAL .)
+    GTE             reduce using rule 37 (rval -> DECIMAL .)
+    LTE             reduce using rule 37 (rval -> DECIMAL .)
+    NE              reduce using rule 37 (rval -> DECIMAL .)
+    )               reduce using rule 37 (rval -> DECIMAL .)
+
+
+state 24
+
+    (38) rval -> BOOLEAN .
+
+    *               reduce using rule 38 (rval -> BOOLEAN .)
+    /               reduce using rule 38 (rval -> BOOLEAN .)
+    +               reduce using rule 38 (rval -> BOOLEAN .)
+    -               reduce using rule 38 (rval -> BOOLEAN .)
+    ;               reduce using rule 38 (rval -> BOOLEAN .)
+    LT              reduce using rule 38 (rval -> BOOLEAN .)
+    EQ              reduce using rule 38 (rval -> BOOLEAN .)
+    GT              reduce using rule 38 (rval -> BOOLEAN .)
+    GTE             reduce using rule 38 (rval -> BOOLEAN .)
+    LTE             reduce using rule 38 (rval -> BOOLEAN .)
+    NE              reduce using rule 38 (rval -> BOOLEAN .)
+    )               reduce using rule 38 (rval -> BOOLEAN .)
+
+
+state 25
+
+    (39) rval -> STRINGLITERAL .
+
+    *               reduce using rule 39 (rval -> STRINGLITERAL .)
+    /               reduce using rule 39 (rval -> STRINGLITERAL .)
+    +               reduce using rule 39 (rval -> STRINGLITERAL .)
+    -               reduce using rule 39 (rval -> STRINGLITERAL .)
+    ;               reduce using rule 39 (rval -> STRINGLITERAL .)
+    LT              reduce using rule 39 (rval -> STRINGLITERAL .)
+    EQ              reduce using rule 39 (rval -> STRINGLITERAL .)
+    GT              reduce using rule 39 (rval -> STRINGLITERAL .)
+    GTE             reduce using rule 39 (rval -> STRINGLITERAL .)
+    LTE             reduce using rule 39 (rval -> STRINGLITERAL .)
+    NE              reduce using rule 39 (rval -> STRINGLITERAL .)
+    )               reduce using rule 39 (rval -> STRINGLITERAL .)
+
+
+state 26
+
+    (7) ifelse -> IF ( ifexpr . ) stmt
+    (8) ifelse -> IF ( ifexpr . ) { code }
+
+    )               shift and go to state 39
+
+
+state 27
+
+    (9) ifexpr -> expression . LT expression
+    (10) ifexpr -> expression . EQ expression
+    (11) ifexpr -> expression . GT expression
+    (12) ifexpr -> expression . GTE expression
+    (13) ifexpr -> expression . LTE expression
+    (14) ifexpr -> expression . NE expression
+    (15) ifexpr -> expression .
+    (16) expression -> expression . + term
+    (17) expression -> expression . - term
+
+    LT              shift and go to state 40
+    EQ              shift and go to state 41
+    GT              shift and go to state 42
+    GTE             shift and go to state 43
+    LTE             shift and go to state 44
+    NE              shift and go to state 45
+    )               reduce using rule 15 (ifexpr -> expression .)
+    +               shift and go to state 34
+    -               shift and go to state 35
+
+
+state 28
+
+    (28) declare -> VAR ID : type . ASSIGN expression
+    (29) declare -> VAR ID : type .
+
+    ASSIGN          shift and go to state 46
+    ;               reduce using rule 29 (declare -> VAR ID : type .)
+
+
+state 29
+
+    (31) type -> INT .
+
+    ASSIGN          reduce using rule 31 (type -> INT .)
+    ;               reduce using rule 31 (type -> INT .)
+
+
+state 30
+
+    (32) type -> FLOAT .
+
+    ASSIGN          reduce using rule 32 (type -> FLOAT .)
+    ;               reduce using rule 32 (type -> FLOAT .)
+
+
+state 31
+
+    (33) type -> BOOL .
+
+    ASSIGN          reduce using rule 33 (type -> BOOL .)
+    ;               reduce using rule 33 (type -> BOOL .)
+
+
+state 32
+
+    (34) type -> CHAR .
+
+    ASSIGN          reduce using rule 34 (type -> CHAR .)
+    ;               reduce using rule 34 (type -> CHAR .)
+
+
+state 33
+
+    (35) type -> STRING .
+
+    ASSIGN          reduce using rule 35 (type -> STRING .)
+    ;               reduce using rule 35 (type -> STRING .)
+
+
+state 34
+
+    (16) expression -> expression + . term
+    (19) term -> . term * factor
+    (20) term -> . term / factor
+    (21) term -> . factor
+    (22) factor -> . rval
+    (23) factor -> . ( expression )
+    (36) rval -> . NUMBER
+    (37) rval -> . DECIMAL
+    (38) rval -> . BOOLEAN
+    (39) rval -> . STRINGLITERAL
+    (40) rval -> . ID
+
+    (               shift and go to state 21
+    NUMBER          shift and go to state 22
+    DECIMAL         shift and go to state 23
+    BOOLEAN         shift and go to state 24
+    STRINGLITERAL   shift and go to state 25
+    ID              shift and go to state 16
+
+    term                           shift and go to state 47
+    factor                         shift and go to state 19
+    rval                           shift and go to state 20
+
+state 35
+
+    (17) expression -> expression - . term
+    (19) term -> . term * factor
+    (20) term -> . term / factor
+    (21) term -> . factor
+    (22) factor -> . rval
+    (23) factor -> . ( expression )
+    (36) rval -> . NUMBER
+    (37) rval -> . DECIMAL
+    (38) rval -> . BOOLEAN
+    (39) rval -> . STRINGLITERAL
+    (40) rval -> . ID
+
+    (               shift and go to state 21
+    NUMBER          shift and go to state 22
+    DECIMAL         shift and go to state 23
+    BOOLEAN         shift and go to state 24
+    STRINGLITERAL   shift and go to state 25
+    ID              shift and go to state 16
+
+    term                           shift and go to state 48
+    factor                         shift and go to state 19
+    rval                           shift and go to state 20
+
+state 36
+
+    (19) term -> term * . factor
+    (22) factor -> . rval
+    (23) factor -> . ( expression )
+    (36) rval -> . NUMBER
+    (37) rval -> . DECIMAL
+    (38) rval -> . BOOLEAN
+    (39) rval -> . STRINGLITERAL
+    (40) rval -> . ID
+
+    (               shift and go to state 21
+    NUMBER          shift and go to state 22
+    DECIMAL         shift and go to state 23
+    BOOLEAN         shift and go to state 24
+    STRINGLITERAL   shift and go to state 25
+    ID              shift and go to state 16
+
+    factor                         shift and go to state 49
+    rval                           shift and go to state 20
+
+state 37
+
+    (20) term -> term / . factor
+    (22) factor -> . rval
+    (23) factor -> . ( expression )
+    (36) rval -> . NUMBER
+    (37) rval -> . DECIMAL
+    (38) rval -> . BOOLEAN
+    (39) rval -> . STRINGLITERAL
+    (40) rval -> . ID
+
+    (               shift and go to state 21
+    NUMBER          shift and go to state 22
+    DECIMAL         shift and go to state 23
+    BOOLEAN         shift and go to state 24
+    STRINGLITERAL   shift and go to state 25
+    ID              shift and go to state 16
+
+    factor                         shift and go to state 50
+    rval                           shift and go to state 20
+
+state 38
+
+    (23) factor -> ( expression . )
+    (16) expression -> expression . + term
+    (17) expression -> expression . - term
+
+    )               shift and go to state 51
+    +               shift and go to state 34
+    -               shift and go to state 35
+
+
+state 39
+
+    (7) ifelse -> IF ( ifexpr ) . stmt
+    (8) ifelse -> IF ( ifexpr ) . { code }
+    (4) stmt -> . declare ;
+    (5) stmt -> . ifelse
+    (6) stmt -> . ;
+    (28) declare -> . VAR ID : type ASSIGN expression
+    (29) declare -> . VAR ID : type
+    (30) declare -> . ID ASSIGN expression
+    (7) ifelse -> . IF ( ifexpr ) stmt
+    (8) ifelse -> . IF ( ifexpr ) { code }
+
+    {               shift and go to state 53
+    ;               shift and go to state 5
+    VAR             shift and go to state 7
+    ID              shift and go to state 8
+    IF              shift and go to state 9
+
+    stmt                           shift and go to state 52
+    declare                        shift and go to state 4
+    ifelse                         shift and go to state 6
+
+state 40
+
+    (9) ifexpr -> expression LT . expression
+    (16) expression -> . expression + term
+    (17) expression -> . expression - term
+    (18) expression -> . term
+    (19) term -> . term * factor
+    (20) term -> . term / factor
+    (21) term -> . factor
+    (22) factor -> . rval
+    (23) factor -> . ( expression )
+    (36) rval -> . NUMBER
+    (37) rval -> . DECIMAL
+    (38) rval -> . BOOLEAN
+    (39) rval -> . STRINGLITERAL
+    (40) rval -> . ID
+
+    (               shift and go to state 21
+    NUMBER          shift and go to state 22
+    DECIMAL         shift and go to state 23
+    BOOLEAN         shift and go to state 24
+    STRINGLITERAL   shift and go to state 25
+    ID              shift and go to state 16
+
+    expression                     shift and go to state 54
+    term                           shift and go to state 18
+    factor                         shift and go to state 19
+    rval                           shift and go to state 20
+
+state 41
+
+    (10) ifexpr -> expression EQ . expression
+    (16) expression -> . expression + term
+    (17) expression -> . expression - term
+    (18) expression -> . term
+    (19) term -> . term * factor
+    (20) term -> . term / factor
+    (21) term -> . factor
+    (22) factor -> . rval
+    (23) factor -> . ( expression )
+    (36) rval -> . NUMBER
+    (37) rval -> . DECIMAL
+    (38) rval -> . BOOLEAN
+    (39) rval -> . STRINGLITERAL
+    (40) rval -> . ID
+
+    (               shift and go to state 21
+    NUMBER          shift and go to state 22
+    DECIMAL         shift and go to state 23
+    BOOLEAN         shift and go to state 24
+    STRINGLITERAL   shift and go to state 25
+    ID              shift and go to state 16
+
+    expression                     shift and go to state 55
+    term                           shift and go to state 18
+    factor                         shift and go to state 19
+    rval                           shift and go to state 20
+
+state 42
+
+    (11) ifexpr -> expression GT . expression
+    (16) expression -> . expression + term
+    (17) expression -> . expression - term
+    (18) expression -> . term
+    (19) term -> . term * factor
+    (20) term -> . term / factor
+    (21) term -> . factor
+    (22) factor -> . rval
+    (23) factor -> . ( expression )
+    (36) rval -> . NUMBER
+    (37) rval -> . DECIMAL
+    (38) rval -> . BOOLEAN
+    (39) rval -> . STRINGLITERAL
+    (40) rval -> . ID
+
+    (               shift and go to state 21
+    NUMBER          shift and go to state 22
+    DECIMAL         shift and go to state 23
+    BOOLEAN         shift and go to state 24
+    STRINGLITERAL   shift and go to state 25
+    ID              shift and go to state 16
+
+    expression                     shift and go to state 56
+    term                           shift and go to state 18
+    factor                         shift and go to state 19
+    rval                           shift and go to state 20
+
+state 43
+
+    (12) ifexpr -> expression GTE . expression
+    (16) expression -> . expression + term
+    (17) expression -> . expression - term
+    (18) expression -> . term
+    (19) term -> . term * factor
+    (20) term -> . term / factor
+    (21) term -> . factor
+    (22) factor -> . rval
+    (23) factor -> . ( expression )
+    (36) rval -> . NUMBER
+    (37) rval -> . DECIMAL
+    (38) rval -> . BOOLEAN
+    (39) rval -> . STRINGLITERAL
+    (40) rval -> . ID
+
+    (               shift and go to state 21
+    NUMBER          shift and go to state 22
+    DECIMAL         shift and go to state 23
+    BOOLEAN         shift and go to state 24
+    STRINGLITERAL   shift and go to state 25
+    ID              shift and go to state 16
+
+    expression                     shift and go to state 57
+    term                           shift and go to state 18
+    factor                         shift and go to state 19
+    rval                           shift and go to state 20
+
+state 44
+
+    (13) ifexpr -> expression LTE . expression
+    (16) expression -> . expression + term
+    (17) expression -> . expression - term
+    (18) expression -> . term
+    (19) term -> . term * factor
+    (20) term -> . term / factor
+    (21) term -> . factor
+    (22) factor -> . rval
+    (23) factor -> . ( expression )
+    (36) rval -> . NUMBER
+    (37) rval -> . DECIMAL
+    (38) rval -> . BOOLEAN
+    (39) rval -> . STRINGLITERAL
+    (40) rval -> . ID
+
+    (               shift and go to state 21
+    NUMBER          shift and go to state 22
+    DECIMAL         shift and go to state 23
+    BOOLEAN         shift and go to state 24
+    STRINGLITERAL   shift and go to state 25
+    ID              shift and go to state 16
+
+    expression                     shift and go to state 58
+    term                           shift and go to state 18
+    factor                         shift and go to state 19
+    rval                           shift and go to state 20
+
+state 45
+
+    (14) ifexpr -> expression NE . expression
+    (16) expression -> . expression + term
+    (17) expression -> . expression - term
+    (18) expression -> . term
+    (19) term -> . term * factor
+    (20) term -> . term / factor
+    (21) term -> . factor
+    (22) factor -> . rval
+    (23) factor -> . ( expression )
+    (36) rval -> . NUMBER
+    (37) rval -> . DECIMAL
+    (38) rval -> . BOOLEAN
+    (39) rval -> . STRINGLITERAL
+    (40) rval -> . ID
+
+    (               shift and go to state 21
+    NUMBER          shift and go to state 22
+    DECIMAL         shift and go to state 23
+    BOOLEAN         shift and go to state 24
+    STRINGLITERAL   shift and go to state 25
+    ID              shift and go to state 16
+
+    expression                     shift and go to state 59
+    term                           shift and go to state 18
+    factor                         shift and go to state 19
+    rval                           shift and go to state 20
+
+state 46
+
+    (28) declare -> VAR ID : type ASSIGN . expression
+    (16) expression -> . expression + term
+    (17) expression -> . expression - term
+    (18) expression -> . term
+    (19) term -> . term * factor
+    (20) term -> . term / factor
+    (21) term -> . factor
+    (22) factor -> . rval
+    (23) factor -> . ( expression )
+    (36) rval -> . NUMBER
+    (37) rval -> . DECIMAL
+    (38) rval -> . BOOLEAN
+    (39) rval -> . STRINGLITERAL
+    (40) rval -> . ID
+
+    (               shift and go to state 21
+    NUMBER          shift and go to state 22
+    DECIMAL         shift and go to state 23
+    BOOLEAN         shift and go to state 24
+    STRINGLITERAL   shift and go to state 25
+    ID              shift and go to state 16
+
+    expression                     shift and go to state 60
+    term                           shift and go to state 18
+    factor                         shift and go to state 19
+    rval                           shift and go to state 20
+
+state 47
+
+    (16) expression -> expression + term .
+    (19) term -> term . * factor
+    (20) term -> term . / factor
+
+    +               reduce using rule 16 (expression -> expression + term .)
+    -               reduce using rule 16 (expression -> expression + term .)
+    ;               reduce using rule 16 (expression -> expression + term .)
+    LT              reduce using rule 16 (expression -> expression + term .)
+    EQ              reduce using rule 16 (expression -> expression + term .)
+    GT              reduce using rule 16 (expression -> expression + term .)
+    GTE             reduce using rule 16 (expression -> expression + term .)
+    LTE             reduce using rule 16 (expression -> expression + term .)
+    NE              reduce using rule 16 (expression -> expression + term .)
+    )               reduce using rule 16 (expression -> expression + term .)
+    *               shift and go to state 36
+    /               shift and go to state 37
+
+
+state 48
+
+    (17) expression -> expression - term .
+    (19) term -> term . * factor
+    (20) term -> term . / factor
+
+    +               reduce using rule 17 (expression -> expression - term .)
+    -               reduce using rule 17 (expression -> expression - term .)
+    ;               reduce using rule 17 (expression -> expression - term .)
+    LT              reduce using rule 17 (expression -> expression - term .)
+    EQ              reduce using rule 17 (expression -> expression - term .)
+    GT              reduce using rule 17 (expression -> expression - term .)
+    GTE             reduce using rule 17 (expression -> expression - term .)
+    LTE             reduce using rule 17 (expression -> expression - term .)
+    NE              reduce using rule 17 (expression -> expression - term .)
+    )               reduce using rule 17 (expression -> expression - term .)
+    *               shift and go to state 36
+    /               shift and go to state 37
+
+
+state 49
+
+    (19) term -> term * factor .
+
+    *               reduce using rule 19 (term -> term * factor .)
+    /               reduce using rule 19 (term -> term * factor .)
+    +               reduce using rule 19 (term -> term * factor .)
+    -               reduce using rule 19 (term -> term * factor .)
+    ;               reduce using rule 19 (term -> term * factor .)
+    LT              reduce using rule 19 (term -> term * factor .)
+    EQ              reduce using rule 19 (term -> term * factor .)
+    GT              reduce using rule 19 (term -> term * factor .)
+    GTE             reduce using rule 19 (term -> term * factor .)
+    LTE             reduce using rule 19 (term -> term * factor .)
+    NE              reduce using rule 19 (term -> term * factor .)
+    )               reduce using rule 19 (term -> term * factor .)
+
+
+state 50
+
+    (20) term -> term / factor .
+
+    *               reduce using rule 20 (term -> term / factor .)
+    /               reduce using rule 20 (term -> term / factor .)
+    +               reduce using rule 20 (term -> term / factor .)
+    -               reduce using rule 20 (term -> term / factor .)
+    ;               reduce using rule 20 (term -> term / factor .)
+    LT              reduce using rule 20 (term -> term / factor .)
+    EQ              reduce using rule 20 (term -> term / factor .)
+    GT              reduce using rule 20 (term -> term / factor .)
+    GTE             reduce using rule 20 (term -> term / factor .)
+    LTE             reduce using rule 20 (term -> term / factor .)
+    NE              reduce using rule 20 (term -> term / factor .)
+    )               reduce using rule 20 (term -> term / factor .)
+
+
+state 51
+
+    (23) factor -> ( expression ) .
+
+    *               reduce using rule 23 (factor -> ( expression ) .)
+    /               reduce using rule 23 (factor -> ( expression ) .)
+    +               reduce using rule 23 (factor -> ( expression ) .)
+    -               reduce using rule 23 (factor -> ( expression ) .)
+    ;               reduce using rule 23 (factor -> ( expression ) .)
+    LT              reduce using rule 23 (factor -> ( expression ) .)
+    EQ              reduce using rule 23 (factor -> ( expression ) .)
+    GT              reduce using rule 23 (factor -> ( expression ) .)
+    GTE             reduce using rule 23 (factor -> ( expression ) .)
+    LTE             reduce using rule 23 (factor -> ( expression ) .)
+    NE              reduce using rule 23 (factor -> ( expression ) .)
+    )               reduce using rule 23 (factor -> ( expression ) .)
+
+
+state 52
+
+    (7) ifelse -> IF ( ifexpr ) stmt .
+
+    ;               reduce using rule 7 (ifelse -> IF ( ifexpr ) stmt .)
+    VAR             reduce using rule 7 (ifelse -> IF ( ifexpr ) stmt .)
+    ID              reduce using rule 7 (ifelse -> IF ( ifexpr ) stmt .)
+    IF              reduce using rule 7 (ifelse -> IF ( ifexpr ) stmt .)
+    $end            reduce using rule 7 (ifelse -> IF ( ifexpr ) stmt .)
+    }               reduce using rule 7 (ifelse -> IF ( ifexpr ) stmt .)
+
+
+state 53
+
+    (8) ifelse -> IF ( ifexpr ) { . code }
+    (2) code -> . stmt
+    (3) code -> . stmt code
+    (4) stmt -> . declare ;
+    (5) stmt -> . ifelse
+    (6) stmt -> . ;
+    (28) declare -> . VAR ID : type ASSIGN expression
+    (29) declare -> . VAR ID : type
+    (30) declare -> . ID ASSIGN expression
+    (7) ifelse -> . IF ( ifexpr ) stmt
+    (8) ifelse -> . IF ( ifexpr ) { code }
+
+    ;               shift and go to state 5
+    VAR             shift and go to state 7
+    ID              shift and go to state 8
+    IF              shift and go to state 9
+
+    code                           shift and go to state 61
+    stmt                           shift and go to state 3
+    declare                        shift and go to state 4
+    ifelse                         shift and go to state 6
+
+state 54
+
+    (9) ifexpr -> expression LT expression .
+    (16) expression -> expression . + term
+    (17) expression -> expression . - term
+
+    )               reduce using rule 9 (ifexpr -> expression LT expression .)
+    +               shift and go to state 34
+    -               shift and go to state 35
+
+
+state 55
+
+    (10) ifexpr -> expression EQ expression .
+    (16) expression -> expression . + term
+    (17) expression -> expression . - term
+
+    )               reduce using rule 10 (ifexpr -> expression EQ expression .)
+    +               shift and go to state 34
+    -               shift and go to state 35
+
+
+state 56
+
+    (11) ifexpr -> expression GT expression .
+    (16) expression -> expression . + term
+    (17) expression -> expression . - term
+
+    )               reduce using rule 11 (ifexpr -> expression GT expression .)
+    +               shift and go to state 34
+    -               shift and go to state 35
+
+
+state 57
+
+    (12) ifexpr -> expression GTE expression .
+    (16) expression -> expression . + term
+    (17) expression -> expression . - term
+
+    )               reduce using rule 12 (ifexpr -> expression GTE expression .)
+    +               shift and go to state 34
+    -               shift and go to state 35
+
+
+state 58
+
+    (13) ifexpr -> expression LTE expression .
+    (16) expression -> expression . + term
+    (17) expression -> expression . - term
+
+    )               reduce using rule 13 (ifexpr -> expression LTE expression .)
+    +               shift and go to state 34
+    -               shift and go to state 35
+
+
+state 59
+
+    (14) ifexpr -> expression NE expression .
+    (16) expression -> expression . + term
+    (17) expression -> expression . - term
+
+    )               reduce using rule 14 (ifexpr -> expression NE expression .)
+    +               shift and go to state 34
+    -               shift and go to state 35
+
+
+state 60
+
+    (28) declare -> VAR ID : type ASSIGN expression .
+    (16) expression -> expression . + term
+    (17) expression -> expression . - term
+
+    ;               reduce using rule 28 (declare -> VAR ID : type ASSIGN expression .)
+    +               shift and go to state 34
+    -               shift and go to state 35
+
+
+state 61
+
+    (8) ifelse -> IF ( ifexpr ) { code . }
+
+    }               shift and go to state 62
+
+
+state 62
+
+    (8) ifelse -> IF ( ifexpr ) { code } .
+
+    ;               reduce using rule 8 (ifelse -> IF ( ifexpr ) { code } .)
+    VAR             reduce using rule 8 (ifelse -> IF ( ifexpr ) { code } .)
+    ID              reduce using rule 8 (ifelse -> IF ( ifexpr ) { code } .)
+    IF              reduce using rule 8 (ifelse -> IF ( ifexpr ) { code } .)
+    $end            reduce using rule 8 (ifelse -> IF ( ifexpr ) { code } .)
+    }               reduce using rule 8 (ifelse -> IF ( ifexpr ) { code } .)
 
